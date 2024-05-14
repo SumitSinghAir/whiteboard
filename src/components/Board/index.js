@@ -16,7 +16,6 @@ const Board = () => {
     boardMouseMoveHandler,
     toolActionType,
     boardMouseUpHandler,
-    activeToolItem,
     textAreaBlurHandler,
     redoHandler,
     undoHandler,
@@ -27,21 +26,11 @@ const Board = () => {
     canvas.height = window.innerHeight;
   }, []);
 
-  // useLayoutEffect(() => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     context.save();
     const roughCanvas = rough.canvas(canvas);
-    // const generator = roughCanvas.generator;
-    // let rect1 = generator.rectangle(50, 50, 100, 110, {
-    //   fill: "red",
-    //   stroke: "grey",
-    // });
-    // roughCanvas.draw(rect1);
-    // const ctx = canvas.getContext("2d");
-    // ctx.fillStyle = "#FF6698";
-    // ctx.fillRect(0,0,150,75);
     console.log(elements);
     elements.forEach((element) => {
       switch (element.type) {
@@ -105,8 +94,6 @@ const Board = () => {
 
   const handleBoardMouseDown = (event) => {
     boardMouseDownHandler(event, toolboxState);
-    // console.log("Mouse clicked, event executed Provider/Reducer:");
-    // console.log(event);
   };
 
   const handleBoardMouseMove = (event) => {

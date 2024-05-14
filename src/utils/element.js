@@ -59,12 +59,10 @@ export const createNewElement = (
       return element;
     }
     case TOOL_ITEMS.CIRCLE: {
-      element.roughEle = gen.circle(
-        x1,
-        y1,
-        2 * Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)),
-        options
-      );
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const dia = 2 * Math.sqrt(dx * dx + dy * dy);
+      element.roughEle = gen.circle(x1, y1, dia, options);
       return element;
     }
     case TOOL_ITEMS.ELLIPSE: {
@@ -121,7 +119,7 @@ export function getSvgPathFromStroke(stroke) {
 }
 
 export const isPointnearElement = (element, pointX, pointY) => {
-  console.log(`is point newr element: ${(pointX, pointY)}`);
+  console.log(`is point new element: ${(pointX, pointY)}`);
   const { x1, y1, x2, y2, type } = element;
   const context = document.getElementById("canvas").getContext("2d");
   switch (type) {
@@ -138,8 +136,11 @@ export const isPointnearElement = (element, pointX, pointY) => {
         isPointNearLine(x1, y2, x1, y1, pointX, pointY)
       );
     case TOOL_ITEMS.CIRCLE:
-      const rad = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const rad = Math.sqrt(dx * dx + dy * dy);
       return isPointNearCircle(x1, y1, rad, pointX, pointY);
+    // return isPointNearCircle(x1, y1, x2, y2, pointX, pointY);
     case TOOL_ITEMS.BRUSH:
       return context.isPointInPath(element.path, pointX, pointY);
     case TOOL_ITEMS.TEXT:

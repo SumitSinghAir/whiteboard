@@ -1,14 +1,9 @@
 import React, { useCallback, useReducer } from "react";
 import boardContext from "./board-context";
-// import Board from "../components/Board";
-// import { useState } from "react";
 import { BOARD_ACTIONS, TOOL_ACTION_TYPES, TOOL_ITEMS } from "../constants";
-// import rough from "roughjs/bin/rough";
 import { createNewElement, getSvgPathFromStroke } from "../utils/element";
 import getStroke from "perfect-freehand";
 import { isPointnearElement } from "../utils/element";
-import { type } from "@testing-library/user-event/dist/type";
-// const gen = rough.generator();
 
 function boardReducer(state, action) {
   switch (action.type) {
@@ -27,24 +22,21 @@ function boardReducer(state, action) {
       console.log("BOARDACTIONS_ERASE");
       const { pointX, pointY } = action.payload;
       console.log(pointX, pointY);
-      let newElements = state.elements;
+      let newElements = [...state.elements];
       newElements = newElements.filter((element) => {
         return !isPointnearElement(element, pointX, pointY);
       });
-      const newHistory = state.history.slice(0, state.index + 1);
-      newHistory.push(newElements);
+
       return {
         ...state,
         elements: newElements,
-        history: newHistory,
-        index: state.index + 1,
       };
     }
     case BOARD_ACTIONS.DRAW_DOWN: {
       console.log("BOARDACTIONS_DRAWDOWN");
       // console.log("mouse click reducer working");
       // console.log("BOARDACTION_DOWN");
-      const prevElements = state.elements;
+      const prevElements = [...state.elements];
       const { clientX, clientY, stroke, fill, size } = action.payload;
       const newElement = createNewElement(
         state.elements.length,
@@ -54,10 +46,6 @@ function boardReducer(state, action) {
         clientY,
         { type: state.activeToolItem, stroke, fill, size }
       );
-      // console.log({
-      //   ...state,
-      //   elements: [...prevElements, newElement],
-      // });
       const newElements = [...prevElements, newElement];
       return {
         ...state,
@@ -72,16 +60,16 @@ function boardReducer(state, action) {
     case BOARD_ACTIONS.DRAW_MOVE: {
       console.log("BOARDACTIONS_DRAWMOVE");
       const { clientX, clientY } = action.payload;
-      const prevElements = state.elements;
-      const index = state.elements.length - 1;
-      const { type } = state.elements[index];
+      const prevElements = [...state.elements];
+      const index = prevElements.length - 1;
+      const { type } = prevElements[index];
       switch (type) {
         case TOOL_ITEMS.ARROW:
         case TOOL_ITEMS.CIRCLE:
         case TOOL_ITEMS.ELLIPSE:
         case TOOL_ITEMS.LINE:
         case TOOL_ITEMS.RECTANGLE: {
-          const { x1, y1, type, fill, size, stroke } = state.elements[index];
+          const { x1, y1, type, fill, size, stroke } = prevElements[index];
           const newElement = createNewElement(index, x1, y1, clientX, clientY, {
             // type: state.activeToolItem,
             type,
@@ -231,7 +219,7 @@ const BoardProvider = ({ children }) => {
       dispatchBoardAction({
         type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
         payload: {
-          toolActionType: TOOL_ACTION_TYPES.ERASING,
+          actionType: TOOL_ACTION_TYPES.ERASING,
         },
       });
       return;
@@ -271,13 +259,15 @@ const BoardProvider = ({ children }) => {
   };
   const boardMouseUpHandler = () => {
     if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
-    if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
+    if (
+      boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING ||
+      boardState.toolActionType === TOOL_ACTION_TYPES.ERASING
+    ) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.DRAW_UP,
         payload: {},
       });
     }
-
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
       payload: {
