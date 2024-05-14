@@ -31,7 +31,6 @@ const Board = () => {
     const context = canvas.getContext("2d");
     context.save();
     const roughCanvas = rough.canvas(canvas);
-    console.log(elements);
     elements.forEach((element) => {
       switch (element.type) {
         case TOOL_ITEMS.ARROW:
@@ -62,7 +61,6 @@ const Board = () => {
     });
 
     return () => {
-      console.log("BOARD_CLEANUP");
       context.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, [elements]);

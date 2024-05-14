@@ -97,7 +97,6 @@ export const createNewElement = (
     }
     default: {
       throw new Error("error in utils/createNewElement");
-      //   return undefined;
     }
   }
 };
@@ -125,7 +124,6 @@ export const isPointnearElement = (element, pointX, pointY) => {
   switch (type) {
     case TOOL_ITEMS.LINE:
     case TOOL_ITEMS.ARROW:
-      // const { x1, y1, x2, y2 } = element;
       return isPointNearLine(x1, y1, x2, y2, pointX, pointY);
     case TOOL_ITEMS.RECTANGLE:
     case TOOL_ITEMS.ELLIPSE:
@@ -140,7 +138,6 @@ export const isPointnearElement = (element, pointX, pointY) => {
       const dy = y2 - y1;
       const rad = Math.sqrt(dx * dx + dy * dy);
       return isPointNearCircle(x1, y1, rad, pointX, pointY);
-    // return isPointNearCircle(x1, y1, x2, y2, pointX, pointY);
     case TOOL_ITEMS.BRUSH:
       return context.isPointInPath(element.path, pointX, pointY);
     case TOOL_ITEMS.TEXT:

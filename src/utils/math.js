@@ -1,18 +1,10 @@
 import { ELEMENT_ERASE_THRESHOLD, CIRCLE_ERASE_THRESHOLD } from "../constants";
 
 export const isPointNearCircle = (x1, y1, radius, pointX, pointY) => {
-  // export const isPointNearCircle = (x1, y1, x2, y2, pointX, pointY) => {
   const dx = pointX - x1;
   const dy = pointY - y1;
   const distFromCenter = Math.sqrt(dx * dx + dy * dy);
-  // return Math.abs(distFromCenter - radius) < ELEMENT_ERASE_THRESHOLD;
   return Math.abs(distFromCenter - radius) < CIRCLE_ERASE_THRESHOLD;
-  // return (
-  //   Math.abs(Math.abs(x2 - x1) - Math.abs(pointX - x1)) <
-  //     ELEMENT_ERASE_THRESHOLD &&
-  //   Math.abs(Math.abs(y2 - y1) - Math.abs(pointY - y1)) <
-  //     ELEMENT_ERASE_THRESHOLD
-  // );
 };
 
 export const isPointNearLine = (x1, y1, x2, y2, pointX, pointY) => {

@@ -8,13 +8,6 @@ const toolboxReducer = (state, action) => {
       const newState = { ...state };
       newState[action.payload.tool].stroke = action.payload.stroke;
       return newState;
-      //   return {
-      //     ...state,
-      //     [action.payload.tool]: {
-      //       ...[action.payload.tool],
-      //       stroke: action.payload.color,
-      //     },
-      //   };
     }
     case TOOLBOX_ACTIONS.CHANGE_FILL: {
       const newState = { ...state };
