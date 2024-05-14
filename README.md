@@ -1,7 +1,10 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-##Note: I am planning to add more functionalities like retaining board on refresh, login, two types of eraser and fill methods in toolbox.
+
+## Note: 
+I plan to add more functionalities like retaining board on refresh, login, two types of eraser and fill methods in the toolbox.
+
 ## Available Scripts
 
 In the project directory, you can run:
