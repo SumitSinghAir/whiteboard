@@ -27,6 +27,7 @@ export const createNewElement = (
 
   const options = {
     seed: id + 1, //seed can't be negative. seed is used to define generation of different roughEle for same component, hence preventing wiggling
+    fillStyle: "solid",
   };
 
   if (stroke) {

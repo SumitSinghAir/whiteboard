@@ -13,15 +13,18 @@ import { type } from "@testing-library/user-event/dist/type";
 function boardReducer(state, action) {
   switch (action.type) {
     case BOARD_ACTIONS.CHANGE_TOOL: {
+      console.log("BOARDACTIONS_CHANGETOOL");
       return { ...state, activeToolItem: action.payload.tool };
     }
     case BOARD_ACTIONS.CHANGE_ACTION_TYPE: {
+      console.log("BOARDACTIONS_CHANGE_ACTION_TYPE");
       return {
         ...state,
-        toolActionType: action.payload.toolActionType,
+        toolActionType: action.payload.actionType,
       };
     }
     case BOARD_ACTIONS.ERASE: {
+      console.log("BOARDACTIONS_ERASE");
       const { pointX, pointY } = action.payload;
       console.log(pointX, pointY);
       let newElements = state.elements;
@@ -38,6 +41,7 @@ function boardReducer(state, action) {
       };
     }
     case BOARD_ACTIONS.DRAW_DOWN: {
+      console.log("BOARDACTIONS_DRAWDOWN");
       // console.log("mouse click reducer working");
       // console.log("BOARDACTION_DOWN");
       const prevElements = state.elements;
@@ -66,7 +70,7 @@ function boardReducer(state, action) {
     }
 
     case BOARD_ACTIONS.DRAW_MOVE: {
-      // console.log("BOARDACTION_MOVE");
+      console.log("BOARDACTIONS_DRAWMOVE");
       const { clientX, clientY } = action.payload;
       const prevElements = state.elements;
       const index = state.elements.length - 1;
@@ -133,19 +137,19 @@ function boardReducer(state, action) {
       }
     }
     case BOARD_ACTIONS.DRAW_UP: {
-      // console.log("BOARDACTION_UP");
+      console.log("BOARDACTION_DRAWUP");
       const elementsCopy = [...state.elements];
       const newHistory = state.history.slice(0, state.index + 1);
       newHistory.push(elementsCopy);
       return {
         ...state,
-        toolActionType: TOOL_ACTION_TYPES.NONE,
         history: newHistory,
         index: state.index + 1,
         // elements: state.elements,
       };
     }
     case BOARD_ACTIONS.CHANGE_TEXT: {
+      console.log("BOARDACTIONS_CHANGETEXT");
       const newElements = [...state.elements];
       const index = newElements.length - 1;
       newElements[index].text = action.payload.text;
@@ -154,12 +158,13 @@ function boardReducer(state, action) {
       return {
         ...state,
         elements: newElements,
-        toolActionType: action.payload.toolActionType,
+        toolActionType: action.payload.actionType,
         history: newHistory,
         index: state.index + 1,
       };
     }
     case BOARD_ACTIONS.UNDO: {
+      console.log("BOARDACTIONS_UNDO");
       const { history, index } = state;
       if (index > 0) {
         const newElements = history[index - 1];
@@ -173,6 +178,7 @@ function boardReducer(state, action) {
       }
     }
     case BOARD_ACTIONS.REDO: {
+      console.log("BOARDACTIONS_REDO");
       const { history, index } = state;
       if (index < history.length - 1) {
         const newElements = history[index + 1];
@@ -245,7 +251,7 @@ const BoardProvider = ({ children }) => {
   const boardMouseMoveHandler = (event) => {
     if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
     const { clientX, clientY } = event;
-    console.log(clientX, clientY);
+    // console.log(clientX, clientY);
     if (boardState.toolActionType === TOOL_ACTION_TYPES.ERASING) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.ERASE,
@@ -254,7 +260,6 @@ const BoardProvider = ({ children }) => {
           pointY: clientY,
         },
       });
-      return;
     } else if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING)
       dispatchBoardAction({
         type: BOARD_ACTIONS.DRAW_MOVE,
@@ -271,13 +276,12 @@ const BoardProvider = ({ children }) => {
         type: BOARD_ACTIONS.DRAW_UP,
         payload: {},
       });
-      return;
     }
 
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
       payload: {
-        toolActionType: TOOL_ACTION_TYPES.NONE,
+        actionType: TOOL_ACTION_TYPES.NONE,
       },
     });
   };
@@ -287,7 +291,7 @@ const BoardProvider = ({ children }) => {
       type: BOARD_ACTIONS.CHANGE_TEXT,
       payload: {
         text,
-        toolActionType: TOOL_ACTION_TYPES.NONE,
+        actionType: TOOL_ACTION_TYPES.NONE,
       },
     });
   };

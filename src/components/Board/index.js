@@ -25,7 +25,7 @@ const Board = () => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  });
+  }, []);
 
   // useLayoutEffect(() => {
   useEffect(() => {
@@ -42,7 +42,7 @@ const Board = () => {
     // const ctx = canvas.getContext("2d");
     // ctx.fillStyle = "#FF6698";
     // ctx.fillRect(0,0,150,75);
-    // console.log(elements);
+    console.log(elements);
     elements.forEach((element) => {
       switch (element.type) {
         case TOOL_ITEMS.ARROW:
@@ -73,6 +73,7 @@ const Board = () => {
     });
 
     return () => {
+      console.log("BOARD_CLEANUP");
       context.clearRect(0, 0, canvas.width, canvas.height);
     };
   }, [elements]);
